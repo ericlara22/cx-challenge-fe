@@ -1,38 +1,85 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Meli Challenge
 
-## Getting Started
+Hola,
+Ante todo, gracias por tu tiempo. A continuación te contaremos de que se trata el desafio.
+Tu objetivo es crear un buscador de productos de Mercado Libre. Dentro del directorio `app`, encontrarás un proyecto en [Next.js](https://nextjs.org/), donde tendrás que desarrollar tu solución. El ejercicio envuelve una serie de iteraciones; intenta completar cada interación antes de leer la próxima.
 
-First, run the development server:
+Vamos a prestar atención sobre todo a los siguientes puntos:
+- Diseño orientado a objetos.
+- Diseño testeable.
+- Arquitectura modular.
+- Código legible y que revele su intención.
+- Extensibilidad.
+- Principios SOLID aplicados de manera criteriosa.
+- Atención a los detalles.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+
+## Iteración 1: Agregar la funcionalidad buscador de productos
+### Feature: Buscador de productos
+
+    Como usuario de Mercado Libre
+    Quiero buscar productos en base a una palabra o parte de ella
+    Para poder comparar y elegir el producto que más me convenga
+
+    Scenario: Un usuario anonimo busca un producto en Mercado Libre
+        Dado un usuario anonimo
+        Cuando ingresa un texto en el buscador
+        Entonces el sistema retorna una lista de productos que contengan el texto, o parte de él, en el título
+
+### Especificaciones técnicas
+
+- El proyecto debe ser reponsive para los siguientes tamaños de pantalla 320, 768, 1280px.
+- Crear un store global utilizando [context api](https://reactjs.org/docs/context.html). El mismo debe controlar el listado de productos.
+
+
+- El componente deberá cumplir con el siguiente contrato
+```javascript
+Interface Product {
+    id: string;
+    title: string;
+    price: {
+        currency: string;
+        amount: string;
+        decimals: number;
+    };
+    installments: {
+        quantity: number;
+        amount: string;
+    };
+    address: {
+        state_name: string;
+        city_name: string;
+    };
+    picture: string;
+    condition: string;
+    free_shipping: boolean;
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Diseños
+![product_list](./resources/product_list.png)
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Iteración 2: Agregar funcionalidad ordenado de productos
+Feature: Ordenar productos
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+    Como usuario de Mercado Libre
+    Quiero ordenar el resultado de búsqueda en base a un criterio
+    Para poder comparar y elegir el producto que más me convenga
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+    Scenario: Un usuario anonimo ordena el resultado de búsqueda en Mercado Libre
+        Dado un usuario anonimo
+        Cuando selecciona un criterio de ordenamiento
+        Entonces el sistema retorna una lista de productos ordenado por el criterio seleccionado
+## Iteración 3: Agregar funcionalidad filtro de precio
+Feature: Fitrar búsqueda por precio
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+    Como usuario de Mercado Libre
+    Quiero filtrar el resultado de búsqueda por un rango de precio
+    Para poder comparar y elegir el producto que más me convenga
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+    Scenario: Un usuario anonimo aplica un filtro de precio al resultado de búsqueda en Mercado Libre
+        Dado un usuario anonimo
+        Cuando aplica el filtro de búsqueda
+        Entonces el sistema retorna una lista de productos filtrados por el rango de precio seleccionado
+## Iteración 4: Mejorar el buscador de productos
+Improvement: Ahora la búsqueda de productos debe ser por título o descripción de producto
