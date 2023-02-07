@@ -26,12 +26,6 @@ Vamos a prestar atención sobre todo a los siguientes puntos:
         Cuando ingresa un texto en el buscador
         Entonces el sistema retorna una lista de productos que contengan el texto, o parte de él, en el título
 
-### Especificaciones técnicas
-
-- El proyecto debe ser reponsive para los siguientes tamaños de pantalla 320, 768, 1280px.
-- Crear un store global utilizando [context api](https://reactjs.org/docs/context.html). El mismo debe controlar el listado de productos.
-
-
 - El componente deberá cumplir con el siguiente contrato
 ```javascript
 Interface Product {
@@ -83,3 +77,22 @@ Feature: Fitrar búsqueda por precio
         Entonces el sistema retorna una lista de productos filtrados por el rango de precio seleccionado
 ## Iteración 4: Mejorar el buscador de productos
 Improvement: Ahora la búsqueda de productos debe ser por título o descripción de producto
+
+
+### Especificaciones técnicas
+
+- El proyecto debe ser reponsive para los siguientes tamaños de pantalla 320, 768, 1280px.
+- Crear un store global utilizando [context api](https://reactjs.org/docs/context.html). El mismo debe controlar el listado de productos.
+- Unit Tests pruebe la cobertura donde importa, concéntrese en las funciones de desafío
+- Usar Typescript
+
+### Deseable
+
+Cosas que pueden ayudar a tu proyecto pero no son obligatorias
+- Commit semántico con o sin una herramienta o libraria
+- Aplicacion de Server Side Render
+- Accesibilidad de los componentes
+- HTML semantic
+- Patrones CSS
+- Seo
+- Integration Tests
