@@ -4,6 +4,14 @@ Hola,
 Ante todo, gracias por tu tiempo. A continuación te contaremos de que se trata el desafio.
 Tu objetivo es crear un buscador de productos de Mercado Libre. Dentro del directorio `app`, encontrarás un proyecto en [Next.js](https://nextjs.org/), donde tendrás que desarrollar tu solución. El ejercicio envuelve una serie de iteraciones; intenta completar cada interación antes de leer la próxima.
 
+Requerimientos técnicos
+
+- El proyecto debe ser desarrollado en tu cuenta personal de github. Cuando finalices, compartenos el link del repositorio y recuerda dar acceso a los entrevistadores.
+- El proyecto debe ser reponsive para los siguientes tamaños de pantalla 320, 768, 1280px.
+- Crear un store global utilizando [context api](https://reactjs.org/docs/context.html). El mismo debe controlar el listado de productos.
+- Crear Unit Tests donde sea necesario, concéntrate en las funciones de desafío.
+- Usar Typescript.
+
 Vamos a prestar atención sobre todo a los siguientes puntos:
 - Diseño orientado a objetos.
 - Diseño testeable.
@@ -13,6 +21,22 @@ Vamos a prestar atención sobre todo a los siguientes puntos:
 - Principios SOLID aplicados de manera criteriosa.
 - Atención a los detalles.
 
+Cosas que pueden ayudar a tu proyecto pero no son obligatorias:
+- Commit semántico con o sin una herramienta o libraria.
+- Aplicacion de Server Side Render.
+- Accesibilidad de los componentes.
+- HTML semantic.
+- Patrones CSS.
+- Seo.
+- Integration Tests.
+
+
+
+Comencemos...
+
+---
+
+&nbsp;
 
 ## Iteración 1: Agregar la funcionalidad buscador de productos
 ### Feature: Buscador de productos
@@ -26,7 +50,18 @@ Vamos a prestar atención sobre todo a los siguientes puntos:
         Cuando ingresa un texto en el buscador
         Entonces el sistema retorna una lista de productos que contengan el texto, o parte de él, en el título
 
-- El componente deberá cumplir con el siguiente contrato
+&nbsp;
+
+### Diseño
+
+![product_list](./resources/product_list.png)
+
+&nbsp;
+
+### Especificaciones técnicas:
+
+- Para construir el componente de resultado de búsqueda, deberás consumir el siguiente servicio: https://api.mercadolibre.com/sites/MLA/search?q={TEXT_TO_SEARCH}&limit=10.
+- El componente deberá cumplir con el siguiente contrato:
 ```javascript
 Interface Product {
     id: string;
@@ -50,8 +85,9 @@ Interface Product {
 }
 ```
 
-### Diseños
-![product_list](./resources/product_list.png)
+---
+
+&nbsp;
 
 ## Iteración 2: Agregar funcionalidad ordenado de productos
 Feature: Ordenar productos
@@ -64,6 +100,40 @@ Feature: Ordenar productos
         Dado un usuario anonimo
         Cuando selecciona un criterio de ordenamiento
         Entonces el sistema retorna una lista de productos ordenado por el criterio seleccionado
+
+&nbsp;
+
+### Diseño
+
+(Ubica el componente donde consideres adecuado para la lectura y experiencia del usuario. Ten en cuenta el orden de los componentes y el comportamiento responsivo)
+
+![sort_component](./resources/sort_component.png)
+
+&nbsp;
+
+### Especificaciones técnicas:
+- Para construir el componente de ordenamiento, deberás consultar el atributo `available_sorts` en la respuesta de la API. El mismo retorna los posibles parametros de ordemamiento.
+
+```javascript
+ "available_sorts": [
+    {
+      "id": "relevance",
+      "name": "Más relevantes"
+    },
+    {
+      "id": "price_desc",
+      "name": "Mayor precio"
+    }
+],
+```
+
+- Para aplicar un ordemiento a la búsqueda de productos, deberás agregar el paramentro `sort={SORT_ID}` a la url, ej: https://api.mercadolibre.com/sites/MLA/search?q={TEXT_TO_SEARCH}&sort=price_desc&limit=10
+
+
+---
+
+&nbsp;
+
 ## Iteración 3: Agregar funcionalidad filtro de precio
 Feature: Fitrar búsqueda por precio
 
@@ -75,24 +145,61 @@ Feature: Fitrar búsqueda por precio
         Dado un usuario anonimo
         Cuando aplica el filtro de búsqueda
         Entonces el sistema retorna una lista de productos filtrados por el rango de precio seleccionado
-## Iteración 4: Mejorar el buscador de productos
-Improvement: Ahora la búsqueda de productos debe ser por título o descripción de producto
+
+&nbsp;
+
+### Diseño
+
+(Ubica el componente donde consideres adecuado para la lectura y experiencia del usuario. Ten en cuenta el orden de los componentes y el comportamiento responsivo)
+
+![price_component](./resources/price_component.png)
+
+&nbsp;
+
+### Especificaciones técnicas:
+- Para construir el componente de filtro de precio, deberás consultar el atributo `available_filters` en la respuesta de la API. El mismo retorna un listado de filtros; dentro de él encontrarás un objeto con los parametros de filtro de precio.
+
+```javascript
+"available_filters": [
+    {},
+    {},
+    {
+      "id": "price",
+      "name": "Precio",
+      "type": "range",
+      "values": [
+        {
+          "id": "*-3000.0",
+          "name": "Hasta $ 3.000",
+          "results": 639
+        },
+        {
+          "id": "3000.0-9500.0",
+          "name": "$3.000 a $9.500",
+          "results": 669
+        },
+        {
+          "id": "9500.0-40000.0",
+          "name": "$9.500 a $40.000",
+          "results": 687
+        }
+      ]
+    },
+    ...
+]
+```
+- Para aplicar un filtro a la búsqueda de productos, deberás agregar el paramentro `{FILTER_ID}={VALUE_ID}` a la url, ej: https://api.mercadolibre.com/sites/MLA/search?q={TEXT_TO_SEARCH}&sort={SORT_ID}&price=3000.0-9500.0&limit=10.
+También puedes agregar un rango numérico personalizado. Para ello debes agregar los valores separados por "-" y sin separador de miles ej: `price=1000.0-1030.0`
 
 
-### Especificaciones técnicas
 
-- El proyecto debe ser reponsive para los siguientes tamaños de pantalla 320, 768, 1280px.
-- Crear un store global utilizando [context api](https://reactjs.org/docs/context.html). El mismo debe controlar el listado de productos.
-- Unit Tests pruebe la cobertura donde importa, concéntrese en las funciones de desafío
-- Usar Typescript
+---
 
-### Deseable
+&nbsp;
 
-Cosas que pueden ayudar a tu proyecto pero no son obligatorias
-- Commit semántico con o sin una herramienta o libraria
-- Aplicacion de Server Side Render
-- Accesibilidad de los componentes
-- HTML semantic
-- Patrones CSS
-- Seo
-- Integration Tests
+## Iteración 4: Mejorar el control de estado
+Improvement: Es necesario migrar el control de estado de **CONTEXT-API** a [**REDUX TOOLKIT**](https://redux-toolkit.js.org/)
+
+
+
+
