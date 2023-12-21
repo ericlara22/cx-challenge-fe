@@ -5,25 +5,34 @@ import { GetServerSideProps } from "next";
 import ProductCard from "../components/ProductCard";
 import PageSelectorStrip from "@/components/PageSelectorStrip";
 import SortComponent from "@/components/SortComponent";
+import PriceFilter from "@/components/PriceFilter";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home({ products, paging, sorting, complete }: any) {
+export default function Home({ products, paging, sorting, priceFilter }: any) {
   return (
     <div>
       <Head>
         <title>Mercado Libre</title>
         <meta name="description" content="Buscador" />
       </Head>
-      <div className="flex justify-end my-4">
-        <SortComponent sorting={sorting} />
+
+      <div className="flex">
+        <div className="w-1/4 pl-5">
+          <PriceFilter filter={priceFilter} />
+        </div>
+        <div className="w-3/4 mr-10">
+          <div className="flex justify-end">
+            <SortComponent sorting={sorting} />
+          </div>
+          <div className=" bg-white shadow-lg rounded-lg pt-2">
+            {products.map((product: any) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+          <PageSelectorStrip total={paging.total} />
+        </div>
       </div>
-      <div className=" bg-white shadow-lg rounded-lg pt-2">
-        {products.map((product: any) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
-      <PageSelectorStrip total={paging.total} />
     </div>
   );
 }
@@ -40,6 +49,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const products = await res.json();
   const paging = products.paging;
   const sorting = products.available_sorts;
+  const availableFilters = products.available_filters;
+  const priceFilter = availableFilters.find(
+    (filter: any) => filter.id === "price"
+  );
 
-  return { props: { products: products.results, paging, sorting, complete: products } };
+  return {
+    props: { products: products.results, paging, sorting, priceFilter },
+  };
 };
