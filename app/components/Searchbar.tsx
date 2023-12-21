@@ -18,7 +18,7 @@ const SearchBar: React.FC = () => {
     event.preventDefault();
     router.push({
       pathname: router.pathname,
-      query: { q: searchQuery },
+      query: { search: searchQuery },
     });
   };
 

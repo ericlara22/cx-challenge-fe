@@ -2,7 +2,6 @@
 import Image from "next/image";
 
 export default function ProductCard({ product }: any) {
-  console.log(product);
   const { price, title, thumbnail, location, installments } = product;
   const installmentsMsg = installments
     ? `En ${installments.quantity} cuotas de ${installments.amount}`
