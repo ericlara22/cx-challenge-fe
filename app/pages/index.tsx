@@ -9,6 +9,15 @@ import PriceFilter from "@/components/PriceFilter";
 
 const inter = Inter({ subsets: ["latin"] });
 
+interface PriceFilter {
+  id: string;
+  name: string;
+  values: {
+    id: string;
+    name: string;
+  }[];
+}
+
 export default function Home({ products, paging, sorting, priceFilter }: any) {
   return (
     <div>
@@ -17,11 +26,14 @@ export default function Home({ products, paging, sorting, priceFilter }: any) {
         <meta name="description" content="Buscador" />
       </Head>
 
-      <div className="flex">
-        <div className="w-1/4 pl-5">
-          <PriceFilter filter={priceFilter} />
+      <div className="flex mb-10">
+        <div className="w-1/4 pr-5 min-w-fit">
+          {
+            priceFilter &&
+            <PriceFilter filter={priceFilter} />
+          }
         </div>
-        <div className="w-3/4 mr-10">
+        <div className="w-3/4">
           <div className="flex justify-end">
             <SortComponent sorting={sorting} />
           </div>
@@ -42,9 +54,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const page = context.query.page;
   const offset = page ? Number(page) * 10 : 0;
   const sort = context.query.sort;
+  const price = context.query.price || '';
 
   const res = await fetch(
-    `https://api.mercadolibre.com/sites/MLA/search?q=${query}&limit=10&offset=${offset}&sort=${sort}`
+    `https://api.mercadolibre.com/sites/MLA/search?q=${query}&limit=10&offset=${offset}&sort=${sort}&price=${price}`
   );
   const products = await res.json();
   const paging = products.paging;
@@ -52,7 +65,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const availableFilters = products.available_filters;
   const priceFilter = availableFilters.find(
     (filter: any) => filter.id === "price"
-  );
+  ) || false;
 
   return {
     props: { products: products.results, paging, sorting, priceFilter },
