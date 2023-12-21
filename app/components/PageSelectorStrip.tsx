@@ -20,7 +20,7 @@ export default function PageSelectorStrip({ total }: any) {
     const prevPage = Math.max(1, page - 1);
     router.push({
       pathname: router.pathname,
-      query: { search: searchQuery, page: prevPage },
+      query: { ...router.query, page: prevPage },
     });
   };
 
@@ -30,7 +30,7 @@ export default function PageSelectorStrip({ total }: any) {
     const nextPage = Math.min(totalPages, page + 1);
     router.push({
       pathname: router.pathname,
-      query: { search: searchQuery, page: nextPage },
+      query: { ...router.query, page: nextPage },
     });
   };
 
