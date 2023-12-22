@@ -17,7 +17,7 @@ export default function Home({ products, paging, sorting, priceFilter }: any) {
         <meta name="description" content={`Buscador`} />
       </Head>
       <Header />
-      <main className="flex">
+      <main className="flex px-5 m-auto max-w-screen-xlx">
         <PriceFilter filter={priceFilter} />
         <ProductsCard products={products} sorting={sorting} paging={paging} />
       </main>

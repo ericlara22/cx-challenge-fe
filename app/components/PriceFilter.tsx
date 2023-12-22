@@ -28,7 +28,7 @@ export default function PriceFilter({ filter }: any) {
   const isApplyButtonDisabled = !minPrice && !maxPrice;
 
   return (
-    <div className="w-1/4 pr-5 min-w-fit">
+    <div className="w-1/4 pr-5 min-w-fit mt-7">
       <div className="flex flex-col items-start space-y-2">
         <label htmlFor={filter.id} className="font-bold">
           {filter.name}

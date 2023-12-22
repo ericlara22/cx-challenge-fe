@@ -36,7 +36,7 @@ export default function PageSelectorStrip({ total }: any) {
 
   return (
     <nav>
-      <div className="flex items-center justify-center space-x-2">
+      <div className="flex items-center justify-center space-x-2 mb-5">
         {page !== 1 && (
           <button
             className="text-blue-500 px-4 py-2 rounded border border-transparent hover:text-blue-600"

@@ -6,7 +6,7 @@ import logo from "@/public/logo.png";
 import magnifierIcon from "@/public/assets/icons/magnifier.svg";
 
 const SearchBar: React.FC = () => {
-  const { products, updateProducts } = useProductContext();
+  // const { products, updateProducts } = useProductContext();
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter()
 
