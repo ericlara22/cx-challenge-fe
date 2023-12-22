@@ -1,18 +1,35 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import styles from '@/styles/Home.module.css'
+import { useEffect } from "react";
+import Head from "next/head";
+import { Inter } from "@next/font/google";
 
-const inter = Inter({ subsets: ['latin'] })
+import { fetchDataToContext } from "@/utils/fetchData";
 
-export default function Home() {
+import Header from "@/components/Header";
+import ProductsCard from "@/components/ProductsCard";
+import PriceFilter from "@/components/PriceFilter";
+import { useProductContext } from "@/context/ProductContext";
+
+const inter = Inter({ subsets: ["latin"] });
+
+export default function Home(context: any) {
+
+  const { state, dispatch } = useProductContext();
+
+  useEffect(() => {
+    fetchDataToContext(state, dispatch);
+  }, [state.searchQuery, state.sort, state.priceRange, state.page]);
+
   return (
-
-    <div>
+    <>
       <Head>
-        <title>Mercado Libre</title>
-        <meta name="description" content="Buscador" />
+        <title>Buscador Mercadolibre</title>
+        <meta name="description" content={`Buscador`} />
       </Head>
-    </div>
-  )
+      <Header />
+      <main className="flex px-5 m-auto max-w-screen-xl">
+        <PriceFilter />
+        <ProductsCard />
+      </main>
+    </>
+  );
 }
