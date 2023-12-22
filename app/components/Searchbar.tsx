@@ -3,6 +3,7 @@ import { useProductContext } from "@/context/ProductContext";
 import Image from "next/image";
 import logo from "@/public/logo.png";
 import magnifierIcon from "@/public/assets/icons/magnifier.svg";
+import { useRouter } from "next/router";
 
 const SearchBar: React.FC = () => {
   const { state, dispatch } = useProductContext();

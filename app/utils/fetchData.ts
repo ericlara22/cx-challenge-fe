@@ -24,7 +24,6 @@ export const fetchDataToContext = async (
     if(sort) queryParams.sort = sort;
     if(priceRange.max && priceRange.min) queryParams.price = `${priceRange.min}-${priceRange.max}`;
 
-    console.log(queryParams.offset)
     // Create the query string
     const queryString = new URLSearchParams(queryParams).toString();
   
