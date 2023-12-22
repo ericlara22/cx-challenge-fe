@@ -7,7 +7,7 @@ class MyDocument extends Document {
         <Head>
           <meta name="viewport" content="width=device-width, initial-scale=1" />
         </Head>
-        <body className="bg-gray-100">
+        <body className="bg-gray-100 min-w-max">
           <Main />
           <NextScript />
         </body>
