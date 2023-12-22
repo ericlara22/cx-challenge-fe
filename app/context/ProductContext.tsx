@@ -1,28 +1,24 @@
 import React, { createContext, useContext, useReducer, Dispatch, ReactNode } from 'react';
-import { Product } from "../types/product"
-import { AppState } from "../types/searchResponse"
-
-type Action =
-  | { type: 'SET_PRODUCTS'; payload: Product[] }
-  | { type: 'SET_PRICE_RANGE'; payload: { min: number; max: number } }
-  | { type: 'SET_SORT'; payload: string };
+import { AppState, AppAction } from "../types/searchResponse"
+import { productReducer } from './reducer';
 
 interface ProductContextProps {
   state: AppState;
-  dispatch: Dispatch<Action>;
+  dispatch: Dispatch<AppAction>;
 }
 
 const init: AppState = {
+  page: 0,
   paging: {
     total: 0,
     offset: 0,
-    limit: 0,
+    limit: 10,
   },
   products: [],
-  searchQuery: '',
-  sort: '',
-  availableSorts: [],
-  priceRange: { min: 0, max: 0 }, 
+  searchQuery: undefined,
+  sort: 'Más relevantes',
+  availableSorts: [{id: '', name: ''}],
+  priceRange: { min: '', max: '' }, 
   availablePricesRanges: {
     id: '',
     name: '',
@@ -32,21 +28,8 @@ const init: AppState = {
 
 const ProductContext = createContext<ProductContextProps | undefined>(undefined);
 
-const productReducer = (state: AppState, action: Action): AppState => {
-  switch (action.type) {
-    case 'SET_PRODUCTS':
-      return { ...state, products: action.payload };
-    case 'SET_PRICE_RANGE':
-      return { ...state, priceRange: action.payload };
-    case 'SET_SORT':
-      return { ...state, sort: action.payload };
-    default:
-      return state;
-  }
-};
-
 export const ProductProvider: React.FC<{ children: ReactNode; initialState: AppState }> = ({ children, initialState }) => {
-  const [state, dispatch] = useReducer(productReducer, initialState);
+  const [state, dispatch] = useReducer(productReducer, initialState || init);
 
   return (
     <ProductContext.Provider value={{ state, dispatch }}>

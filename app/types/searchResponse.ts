@@ -1,12 +1,13 @@
 import { Product } from './product';
 
 export interface AppState {
+  page: number;
   paging: {total: number, offset: number, limit: number},
   products: Product[];
-  searchQuery: string;
+  searchQuery: string | undefined;
   sort: string;
-  availableSorts: { id: string; name: string }[];
-  priceRange: { min: number, max: number },
+  availableSorts: [{ id: string; name: string }];
+  priceRange: { min: string, max: string },
   availablePricesRanges: {
     id: string,
     name: string,
@@ -20,7 +21,9 @@ export type AppAction =
   | { type: 'SET_SORT'; payload: string }
   | { type: 'SET_AVAILABLE_SORTS'; payload: AppState['availableSorts'] }
   | { type: 'SET_AVAILABLE_PRICES_RANGES'; payload: AppState['availablePricesRanges'] }
-  | { type: 'SET_PRICE_RANGE'; payload: AppState['priceRange'] };
+  | { type: 'SET_PRICE_RANGE'; payload: AppState['priceRange'] }
+  | { type: 'SET_PAGING'; payload: AppState['paging'] }
+  | { type: 'SET_PAGE'; payload: number };
 
 export interface SearchResponse {
   'site_id': string,
