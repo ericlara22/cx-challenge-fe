@@ -1,22 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
 
-export default function SortComponent({ sorting }: { sorting: any }) {
+import { useProductContext } from "@/context/ProductContext";
+import { AppState, SearchResponse } from "@/types/searchResponse";
+
+export default function SortComponent() {
+  const { state, dispatch } = useProductContext();
   const router = useRouter();
-  const [selectedCategory, setSelectedCategory] = useState("Más relevantes");
-  const [categories, setCategories] = useState([
+  const [selectedCategory, setSelectedCategory] = useState(state.sort);
+  const [categories] = useState([
     "Más relevantes",
     "Menor precio",
     "Mayor precio",
   ]);
 
-  useEffect(() => {
-    const selected = categories.find((category) =>
-      sorting.every((sort: any) => sort.name !== category)
-    );
-
-    setSelectedCategory(selected || "Más relevantes");
-  }, [sorting, categories]);
+  const sorting = state.availableSorts;
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -24,17 +22,13 @@ export default function SortComponent({ sorting }: { sorting: any }) {
     setIsDropdownOpen((prev) => !prev);
   };
 
-  const handleSortChange = (item: any) => {
-    const sort = sorting.find((sort: any) => sort.name === item);
-
+  const handleSortChange = ( item: any ) => {
+    const sort: SearchResponse["sort"] = sorting.find(
+      (sort: any) => sort.name === item
+    ) || { id: "", name: "" };
     setIsDropdownOpen(false);
-    // Update the URL with the selected sorting option
-    if (sort) {
-      router.push({
-        pathname: router.pathname,
-        query: { ...router.query, sort: sort.id },
-      });
-    }
+    setSelectedCategory(sort.name);
+    dispatch({ type: "SET_SORT", payload: sort.id });
   };
 
   return (
@@ -77,9 +71,8 @@ export default function SortComponent({ sorting }: { sorting: any }) {
         >
           {categories.map((item: string) => (
             <li key={item}>
-              <a
-                href="#"
-                className={`block px-4 py-3 hover:bg-gray-100 ${
+              <button
+                className={`block px-4 py-3 hover:bg-gray-100 w-full ${
                   selectedCategory === item
                     ? "border-l-4 border-blue-500 text-blue-500"
                     : "border-l-4 border-white hover:border-blue-200"
@@ -87,7 +80,7 @@ export default function SortComponent({ sorting }: { sorting: any }) {
                 onClick={() => handleSortChange(item)}
               >
                 {item}
-              </a>
+              </button>
             </li>
           ))}
         </ul>

@@ -1,56 +1,47 @@
-import { createContext, useContext, FC, ReactNode, Dispatch, SetStateAction, useState } from 'react';
-
-interface Product {
-  id: string;
-  title: string;
-  price: {
-      currency: string;
-      amount: string;
-      decimals: number;
-  };
-  installments: {
-      quantity: number;
-      amount: string;
-  };
-  address: {
-      state_name: string;
-      city_name: string;
-  };
-  picture: string;
-  condition: string;
-  free_shipping: boolean;
-}
+import React, { createContext, useContext, useReducer, Dispatch, ReactNode } from 'react';
+import { AppState, AppAction } from "../types/searchResponse"
+import { productReducer } from './reducer';
 
 interface ProductContextProps {
-  products: Product[];
-  updateProducts: Dispatch<SetStateAction<Product[] | ((prevProducts: Product[]) => Product[])>>;
+  state: AppState;
+  dispatch: Dispatch<AppAction>;
 }
 
+const init: AppState = {
+  page: 0,
+  paging: {
+    total: 0,
+    offset: 0,
+    limit: 10,
+  },
+  products: [],
+  searchQuery: undefined,
+  sort: 'Más relevantes',
+  availableSorts: [{id: '', name: ''}],
+  priceRange: { min: '', max: '' }, 
+  availablePricesRanges: {
+    id: '',
+    name: '',
+    values: []
+  }
+};
+
 const ProductContext = createContext<ProductContextProps | undefined>(undefined);
+
+export const ProductProvider: React.FC<{ children: ReactNode; initialState: AppState }> = ({ children, initialState }) => {
+  const [state, dispatch] = useReducer(productReducer, initialState || init);
+
+  return (
+    <ProductContext.Provider value={{ state, dispatch }}>
+      {children}
+    </ProductContext.Provider>
+  );
+};
 
 export const useProductContext = () => {
   const context = useContext(ProductContext);
   if (!context) {
-    throw new Error('useProductContext debe usarse dentro de un ProductProvider');
+    throw new Error('useProductContext must be used within a ProductProvider');
   }
   return context;
-};
-
-interface ProductProviderProps {
-  children: ReactNode;
-  initialProducts?: Product[];
-}
-
-export const ProductProvider: FC<ProductProviderProps> = ({ children, initialProducts = []  }) => {
-  const [products, setProducts] = useState<Product[]>(initialProducts);
-
-  const updateProducts = (newProducts: any) => {
-    setProducts(newProducts);
-  };
-
-  return (
-    <ProductContext.Provider value={{ products, updateProducts }}>
-      {children}
-    </ProductContext.Provider>
-  );
 };

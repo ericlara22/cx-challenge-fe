@@ -1,14 +1,12 @@
 import React, { ChangeEvent, useState } from "react";
-import { useRouter } from 'next/router'
 import { useProductContext } from "@/context/ProductContext";
 import Image from "next/image";
 import logo from "@/public/logo.png";
 import magnifierIcon from "@/public/assets/icons/magnifier.svg";
 
 const SearchBar: React.FC = () => {
-  const { products, updateProducts } = useProductContext();
+  const { state, dispatch } = useProductContext();
   const [searchQuery, setSearchQuery] = useState("");
-  const router = useRouter()
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
@@ -16,10 +14,7 @@ const SearchBar: React.FC = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    router.push({
-      pathname: router.pathname,
-      query: { search: searchQuery },
-    });
+    dispatch({ type: 'SET_SEARCH_QUERY', payload: searchQuery });
   };
 
   return (
@@ -31,10 +26,13 @@ const SearchBar: React.FC = () => {
           name="search"
           type="text"
           placeholder="Buscar"
-          value={searchQuery}
+          defaultValue={state.searchQuery}
           onChange={handleInputChange}
         />
-        <button type="submit" className="bg-gray-200 px-3 h-8">
+        <button
+          type="submit"
+          className="bg-gray-200 px-3 h-8"
+        >
           <Image src={magnifierIcon} alt="Buscar" width={20} height={20} />
         </button>
       </form>
