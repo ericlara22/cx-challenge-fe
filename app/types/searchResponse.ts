@@ -1,16 +1,17 @@
 import { Product } from './product';
 
 export interface AppState {
+  paging: {total: number, offset: number, limit: number},
   products: Product[];
   searchQuery: string;
   sort: string;
   availableSorts: { id: string; name: string }[];
   priceRange: { min: number, max: number },
-  availablePricesRanges: [{
+  availablePricesRanges: {
     id: string,
     name: string,
-    results: number
-  }]
+    values: []
+  }
 }
 
 export type AppAction =

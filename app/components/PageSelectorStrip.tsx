@@ -2,10 +2,16 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
-export default function PageSelectorStrip({ total }: any) {
+import { useProductContext } from "@/context/ProductContext";
+
+import { getPages } from "@/utils/getPages";
+
+export default function PageSelectorStrip() {
+  const { state, dispatch } = useProductContext();
   const [page, setPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
+
+  const total = getPages(10, state.paging.total);
 
   useEffect(() => {
     const currentPage = router.query.page
@@ -13,7 +19,6 @@ export default function PageSelectorStrip({ total }: any) {
       : 1;
     const currentSearch = (router.query.search as string) || "";
     setPage(currentPage);
-    setSearchQuery(currentSearch);
   }, [router.query.page, router.query.search]);
 
   const handlePrevious = () => {
@@ -45,7 +50,9 @@ export default function PageSelectorStrip({ total }: any) {
             {"< Anterior"}
           </button>
         )}
-        <span className="bg-gray-200 text-gray-500 flex justify-center ml-0 w-6">{page}</span>
+        <span className="bg-gray-200 text-gray-500 flex justify-center ml-0 w-6">
+          {page}
+        </span>
         <div className="text-gray-500">de {Math.ceil(total / 10)}</div>
         <button
           className="text-blue-500 px-4 py-2 rounded border border-transparent hover:text-blue-600"

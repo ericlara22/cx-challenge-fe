@@ -1,10 +1,17 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 
-export default function PriceFilter({ filter }: any) {
+import { AppState } from "@/types/searchResponse";
+
+import { useProductContext } from "@/context/ProductContext";
+
+export default function PriceFilter() {
   const router = useRouter();
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
+
+  const { state, dispatch } = useProductContext();
+  const filter: AppState['availablePricesRanges'] = state.availablePricesRanges;
 
   const handleValueChange = (valueId: string) => {
     updateURL({ ...router.query, price: valueId });

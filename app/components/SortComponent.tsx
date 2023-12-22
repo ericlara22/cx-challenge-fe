@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
-export default function SortComponent({ sorting }: { sorting: any }) {
+import { useProductContext } from "@/context/ProductContext";
+
+export default function SortComponent() {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState("Más relevantes");
   const [categories, setCategories] = useState([
@@ -9,6 +11,10 @@ export default function SortComponent({ sorting }: { sorting: any }) {
     "Menor precio",
     "Mayor precio",
   ]);
+
+  const { state, dispatch } = useProductContext();
+
+  const sorting = state.availableSorts;
 
   useEffect(() => {
     const selected = categories.find((category) =>
