@@ -7,8 +7,8 @@ interface ProductContextProps {
   dispatch: Dispatch<AppAction>;
 }
 
-const init: AppState = {
-  page: 0,
+const initialState: AppState = {
+  page: 1,
   paging: {
     total: 0,
     offset: 0,
@@ -16,7 +16,7 @@ const init: AppState = {
   },
   products: [],
   searchQuery: undefined,
-  sort: 'Más relevantes',
+  sort: 'relevance',
   availableSorts: [{id: '', name: ''}],
   priceRange: { min: '', max: '' }, 
   availablePricesRanges: {
@@ -28,8 +28,8 @@ const init: AppState = {
 
 const ProductContext = createContext<ProductContextProps | undefined>(undefined);
 
-export const ProductProvider: React.FC<{ children: ReactNode; initialState: AppState }> = ({ children, initialState }) => {
-  const [state, dispatch] = useReducer(productReducer, initialState || init);
+export const ProductProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [state, dispatch] = useReducer(productReducer, initialState);
 
   return (
     <ProductContext.Provider value={{ state, dispatch }}>

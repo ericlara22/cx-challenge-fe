@@ -1,11 +1,12 @@
-import ProductCard from "./ProductCard";
+import ProductRow from "./ProductRow";
 import PageSelectorStrip from "./PageSelectorStrip";
 import SortComponent from "./SortComponent";
 
 import { useProductContext } from "@/context/ProductContext";
+import { Product } from "@/types/product";
 
 export default function ProductsCard() {
-  const { state, dispatch } = useProductContext();
+  const { state } = useProductContext();
 
   const products = state.products;
 
@@ -15,8 +16,8 @@ export default function ProductsCard() {
         <SortComponent />
       </div>
       <div className=" bg-white shadow-lg rounded-lg pt-2">
-        {products.map((product: any) => (
-          <ProductCard key={product.id} product={product} />
+        {products.map((product: Product) => (
+          <ProductRow key={product.id} product={product} />
         ))}
       </div>
       <PageSelectorStrip />
