@@ -37,7 +37,7 @@ export default function SortComponent() {
 
   useEffect(() => {
     setSelectedCategory(state.sort);
-  }, [state]);
+  }, [state.sort]);
 
   return (
     <div className="relative inline-block">

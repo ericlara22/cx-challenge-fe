@@ -12,7 +12,7 @@ import { useProductContext } from "@/context/ProductContext";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home({ products, queryValues }: any) {
-  const { state, dispatch } = useProductContext();
+  const { dispatch } = useProductContext();
 
   useEffect(() => {
     dispatch({ type: "SET_PRODUCTS", payload: products.results });
@@ -27,6 +27,8 @@ export default function Home({ products, queryValues }: any) {
     dispatch({ type: "SET_SEARCH_QUERY", payload: queryValues.search });
     dispatch({ type: "SET_SORT", payload: queryValues.sort });
     dispatch({  type: "SET_PRICE_RANGE", payload: queryValues.price });
+    dispatch({ type: "SET_PAGE", payload: Number(queryValues.page) });
+    dispatch({ type: "SET_PAGING", payload: products.paging });
   }, [products, queryValues, dispatch]);
 
   return (
@@ -45,7 +47,7 @@ export default function Home({ products, queryValues }: any) {
 }
 
 export async function getServerSideProps({ query }: any) {
-  const { sort = "relevance", price = "", search = "", page = "" } = query;
+  const { sort = "relevance", price = "", search = "", page = 1 } = query;
   const products = await fetchProducts(query);
 
   const queryValues = {

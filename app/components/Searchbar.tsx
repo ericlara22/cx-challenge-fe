@@ -19,12 +19,14 @@ const SearchBar: React.FC = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    dispatch({ type: 'SET_SEARCH_QUERY', payload: searchQuery });
-    dispatch({ type: 'SET_SORT', payload: 'relevance' });
-    router.push({
-      pathname: "/",
-      query: { search: searchQuery },
-    });
+    if(searchQuery){
+      dispatch({ type: 'SET_SEARCH_QUERY', payload: searchQuery });
+      dispatch({ type: 'SET_SORT', payload: 'relevance' });
+      router.push({
+        pathname: "/",
+        query: { search: searchQuery },
+      });
+    }
   };
 
   return (

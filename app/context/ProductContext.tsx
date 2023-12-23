@@ -8,7 +8,7 @@ interface ProductContextProps {
 }
 
 const initialState: AppState = {
-  page: 0,
+  page: 1,
   paging: {
     total: 0,
     offset: 0,
