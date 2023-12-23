@@ -1,9 +1,9 @@
-import React, { ChangeEvent, useState } from "react";
-import { useProductContext } from "@/context/ProductContext";
+import { ChangeEvent, FormEvent, useState } from "react";
 import Image from "next/image";
-import logo from "@/public/logo.png";
-import magnifierIcon from "@/public/assets/icons/magnifier.svg";
 import { useRouter } from "next/router";
+import { useProductContext } from "@/context/ProductContext";
+import magnifierIcon from "@/public/assets/icons/magnifier.svg";
+import logo from "@/public/logo.png";
 
 import { fetchProducts } from "@/utils/fetchData";
 
@@ -17,7 +17,7 @@ const SearchBar: React.FC = () => {
     setSearchQuery(event.target.value);
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     if(searchQuery){
       dispatch({ type: 'SET_SEARCH_QUERY', payload: searchQuery });

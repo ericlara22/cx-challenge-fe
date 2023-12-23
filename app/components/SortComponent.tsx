@@ -21,7 +21,7 @@ export default function SortComponent() {
     setIsDropdownOpen((prev) => !prev);
   };
   
-  const handleSortChange = ( item: any ) => {
+  const handleSortChange = ( item: string ) => {
     const sorting = state.availableSorts;
     const sort: SearchResponse["sort"] = sorting.find(
       (sort: any) => sort.id === item

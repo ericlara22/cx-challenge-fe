@@ -1,7 +1,8 @@
+import { Product } from "@/types/product";
 import Image from "next/image";
 
-export default function ProductCard({ product }: any) {
-  const { price, title, thumbnail, location, installments } = product;
+export default function ProductCard({ product }: {product: Product}) {
+  const { price, title, thumbnail, installments } = product;
   const installmentsMsg = installments
     ? `En ${installments.quantity} cuotas de ${installments.amount}`
     : "";

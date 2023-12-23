@@ -64,15 +64,25 @@ export default function PriceFilter() {
         </label>
 
         {filter &&
-          filter.values.map((value: any, index: number) => (
-            <button
-              key={index}
-              onClick={() => handleSelectValue(value.id)}
-              className={"hover:text-blue-500"}
-            >
-              {value.name}
-            </button>
-          ))}
+          filter.values.map(
+            (
+              value: { id: string; name: string; results: number },
+              index: number
+            ) => (
+              <button
+                key={index}
+                onClick={() => handleSelectValue(value.id)}
+                className="hover:text-blue-500 flex items-center justify-between"
+              >
+                <div className="flex items-center">
+                  <span className="text-sm text-gray-600">{value.name}</span>
+                  <p className="text-gray-400 text-xs ml-2">
+                    ({value.results})
+                  </p>
+                </div>
+              </button>
+            )
+          )}
 
         <div className="flex space-x-2">
           <input
