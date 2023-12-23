@@ -1,20 +1,32 @@
-import React, { ChangeEvent, useState } from "react";
-import { useProductContext } from "@/context/ProductContext";
+import { ChangeEvent, FormEvent, useState } from "react";
 import Image from "next/image";
-import logo from "@/public/logo.png";
+import { useRouter } from "next/router";
+import { useProductContext } from "@/context/ProductContext";
 import magnifierIcon from "@/public/assets/icons/magnifier.svg";
+import logo from "@/public/logo.png";
+
+import { fetchProducts } from "@/utils/fetchData";
 
 const SearchBar: React.FC = () => {
   const { state, dispatch } = useProductContext();
   const [searchQuery, setSearchQuery] = useState("");
 
+  const router = useRouter();
+
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    dispatch({ type: 'SET_SEARCH_QUERY', payload: searchQuery });
+    if(searchQuery){
+      dispatch({ type: 'SET_SEARCH_QUERY', payload: searchQuery });
+      dispatch({ type: 'SET_SORT', payload: 'relevance' });
+      router.push({
+        pathname: "/",
+        query: { search: searchQuery },
+      });
+    }
   };
 
   return (
@@ -39,5 +51,12 @@ const SearchBar: React.FC = () => {
     </div>
   );
 };
+
+export async function getServerSideProps(context: any) {
+  const { query } = context;
+  const products = await fetchProducts(query);
+
+  return { props: { products } };
+}
 
 export default SearchBar;
