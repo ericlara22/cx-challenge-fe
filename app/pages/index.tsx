@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import Head from "next/head";
 import { Inter } from "@next/font/google";
 
-import { fetchDataToContext } from "@/utils/fetchData";
+import { fetchProducts } from "@/utils/fetchData";
 
 import Header from "@/components/Header";
 import ProductsCard from "@/components/ProductsCard";
@@ -11,13 +11,23 @@ import { useProductContext } from "@/context/ProductContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home(context: any) {
-
+export default function Home({ products, queryValues }: any) {
   const { state, dispatch } = useProductContext();
 
   useEffect(() => {
-    fetchDataToContext(state, dispatch);
-  }, [state.searchQuery, state.sort, state.priceRange, state.page]);
+    dispatch({ type: "SET_PRODUCTS", payload: products.results });
+    dispatch({
+      type: "SET_AVAILABLE_SORTS",
+      payload: products.available_sorts,
+    });
+    dispatch({
+      type: "SET_AVAILABLE_PRICES_RANGES",
+      payload: products.available_filters.find((el: any) => el.id === "price"),
+    });
+    dispatch({ type: "SET_SEARCH_QUERY", payload: queryValues.search });
+    dispatch({ type: "SET_SORT", payload: queryValues.sort });
+    dispatch({  type: "SET_PRICE_RANGE", payload: queryValues.price });
+  }, [products, queryValues, dispatch]);
 
   return (
     <>
@@ -32,4 +42,21 @@ export default function Home(context: any) {
       </main>
     </>
   );
+}
+
+export async function getServerSideProps({ query }: any) {
+  const { sort = "relevance", price = "", search = "", page = "" } = query;
+  const products = await fetchProducts(query);
+
+  const queryValues = {
+    sort,
+    price: {
+      min: price.split("-")[0] || '',
+      max: price.split("-")[1] || '',
+    },
+    search,
+    page,
+  };
+
+  return { props: { products, queryValues } };
 }
